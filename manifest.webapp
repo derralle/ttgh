@@ -1,0 +1,10 @@
+{
+    "name": "TTGH",
+    "description": "time to go home",
+  "launch_path": "/.",
+    "developer": {
+		"name": "Ralph Mueller"
+		},
+	
+    "installs_allowed_from": ["*"]
+	}
