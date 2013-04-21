@@ -1,10 +1,13 @@
 {
     "name": "TTGH",
     "description": "time to go home",
-  "launch_path": "/.",
-    "developer": {
-		"name": "Ralph Mueller"
+	"launch_path": "/index.html",
+    "icons": {
+		"48": "exit.png",
+		"128": "exit_128.png"
+	},
+	"developer": {
+		"name": "Ralph Müller"
 		},
-	
-    "installs_allowed_from": ["*"]
+	"default_locale": "de"
 	}
