@@ -64,6 +64,10 @@ function main ()
 	var Minuten = 0.0;
 	var Sekunden = 0.0;
 	var Zeit = new Array();
+	var ueberstunden = 0;
+	var ueberstundenarray = new Array();
+	var regelstunden = 0;
+	var gehengeplantObj = new Date();
 	
 	// 1. Step Formulardaten auslesen
 	zuleistenZeit = auslesenZeit("tf_arbeiten");
@@ -71,20 +75,23 @@ function main ()
 	
 	////console.log("DEBUG: zuleisten: " + zuleistenZeit);
 	
+	//kommen einlesen
 	//Stunden setzen
 	Stunden = auslesenDate("tf_gekommen").getHours();
 	gekommenZeitObj.setHours(Stunden);
-	
 	
 	//Minuten setzen
 	Minuten = auslesenDate("tf_gekommen").getMinutes();
 	gekommenZeitObj.setMinutes(Minuten);
 	
-	//Sekunden auf null setzen 
+	
 	gekommenZeitObj.setSeconds(0);
 	////console.log("DEBUG: gekommen: " + gekommenZeitObj.toLocaleString());
 	
-	
+	//gehengeplant setzen
+	gehengeplantObj.setHours(auslesenDate("tf_gehen").getHours());
+	gehengeplantObj.setMinutes(auslesenDate("tf_gehen").getHours());
+	gehengeplantObj.setSeconds(0);
 	// 2. Step Werte berechnen
 	
 	//gehen ausrechnen 
@@ -100,12 +107,20 @@ function main ()
 	Minuten = Zeit[1];
 	Sekunden = Zeit[2]; 
 	
+	//Überstunden ausrechnen
+	
+	//ueberstunden = (gehen - (kommen + pause)) - regelstunden 
+	ueberstunden = (gehengeplantObj.getTime() - gekommenZeitObj.getTime()) -  PausenZeit - zuleistenZeit;
+	ueberstundenarray = msTohms(ueberstunden);
+	
+	
 	////console.log( "DEBUG: noch: " + Stunden + "h " + Minuten +"min " + Sekunden + "sec" );
 	
 	// 3. Step Werte ausgeben
 	
 	document.getElementById("countdown").innerHTML = (Stunden + "h " + Minuten +"min " + Sekunden + "sec");
-	document.getElementById("gehenzeit").innerHTML = (gehenZeitObj.getHours() + ":" + gehenZeitObj.getMinutes()) + "Uhr";
+	document.getElementById("gehenzeit").innerHTML = (gehenZeitObj.getHours() + ":" + gehenZeitObj.getMinutes() + "Uhr");
+	document.getElementById("ueberst_gepl").innerHTML = (ueberstundenarray[0] + "h " + ueberstundenarray[1] + "min");
 }  
 
 //Umrechnen h:m:s in ms
@@ -140,14 +155,23 @@ function msTohms (ms)
 {
 	// Array für Rückgabe
 	var hms = new Array();
+	var vorz = 1.0;
 	
 	hms[0] = 0; //Stunden
 	hms[1] = 0; //Minuten
 	hms[2] = 0; //Sekunden
 	
+	if (ms < 0)
+	{
+	vorz = (-1.0);
+	ms = ms * (-1.0) ;
+	}
+	
 	hms[0] = Math.floor(ms / 3600000);
 	hms[1] = Math.floor((ms - (hms[0] * 3600000)) / 60000);
 	hms[2] = Math.floor((ms - ((hms[0] * 3600000) + (hms[1] * 60000))) / 1000);
+	
+	hms[0] = hms[0] * vorz;
 	
 	return hms;
 }
