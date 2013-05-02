@@ -38,7 +38,7 @@ function auslesenZeit (idString)
 	
 	var inString = document.getElementById(idString).value;
 	
-	if (inString.length == 5)
+	if (inString.length == 5 | inString.length)
 	{
 		ZeitArray = inString.split(':');
 		Stunden = ZeitArray[0];
@@ -69,7 +69,12 @@ function main ()
 	var regelstunden = 0;
 	var gehengeplantObj = new Date();
 	
-	// 1. Step Formulardaten auslesen
+	
+	////////////////////////////////////
+	// 1. Step Formulardaten auslesen //
+	////////////////////////////////////
+	
+	
 	zuleistenZeit = auslesenZeit("tf_arbeiten");
 	PausenZeit = auslesenZeit("tf_pause");
 	
@@ -90,9 +95,14 @@ function main ()
 	
 	//gehengeplant setzen
 	gehengeplantObj.setHours(auslesenDate("tf_gehen").getHours());
-	gehengeplantObj.setMinutes(auslesenDate("tf_gehen").getHours());
+	gehengeplantObj.setMinutes(auslesenDate("tf_gehen").getMinutes());
 	gehengeplantObj.setSeconds(0);
-	// 2. Step Werte berechnen
+	
+	
+	/////////////////////////////
+	// 2. Step Werte berechnen //
+	/////////////////////////////
+	
 	
 	//gehen ausrechnen 
 	ms = gekommenZeitObj.getTime() + zuleistenZeit + PausenZeit;
@@ -110,13 +120,17 @@ function main ()
 	//Überstunden ausrechnen
 	
 	//ueberstunden = (gehen - (kommen + pause)) - regelstunden 
-	ueberstunden = (gehengeplantObj.getTime() - gekommenZeitObj.getTime()) -  PausenZeit - zuleistenZeit;
+	ueberstunden = gehengeplantObj.getTime() - gekommenZeitObj.getTime() -  PausenZeit - zuleistenZeit;
 	ueberstundenarray = msTohms(ueberstunden);
 	
 	
 	////console.log( "DEBUG: noch: " + Stunden + "h " + Minuten +"min " + Sekunden + "sec" );
 	
-	// 3. Step Werte ausgeben
+	
+	////////////////////////////
+	// 3. Step Werte ausgeben //
+	////////////////////////////
+	
 	
 	document.getElementById("countdown").innerHTML = (Stunden + "h " + Minuten +"min " + Sekunden + "sec");
 	document.getElementById("gehenzeit").innerHTML = (gehenZeitObj.getHours() + ":" + gehenZeitObj.getMinutes() + "Uhr");
@@ -150,7 +164,7 @@ function hmsToms (h, min, sec)
 	return ms;
 }
 
-//Umrechnen ms in h:m:s Ruckgabewert als Array 
+//Umrechnen ms in h:m:s Rückgabewert als Array 
 function msTohms (ms)
 {
 	// Array für Rückgabe
